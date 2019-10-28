@@ -58,11 +58,8 @@ class HashTable:
             if self.storage[idx] and self.storage[idx].key != key:
                 node = self.storage[idx]
                 node.next = LinkedPair(key, value)
-                # self.storage[idx] = self.storage[idx].next
-            # if self.storage[idx] is None:
-            #     node.next = LinkedPair(key, value)
-            # else:
-            #     self.storage[idx].value = value
+            else:
+                self.storage[idx].value = value
         else:
             self.storage[idx] = LinkedPair(key, value)
         self.count += 1
@@ -92,9 +89,10 @@ class HashTable:
         '''
         idx = self._hash_mod(key)
         if self.storage[idx]:
-            while self.storage[idx] and self.storage[idx].key != key:
-                self.storage[idx] = self.storage[idx].next
-            return self.storage[idx].value
+            if self.storage[idx].key != key:
+                return self.storage[idx].next.value
+            else:
+                return self.storage[idx].value
         else:
             return None
 
@@ -105,7 +103,6 @@ class HashTable:
 
         Fill this in.
         '''
-        # self.capacity *= 2
         new_storage = [None] * self.capacity * 2
         for i in range(self.capacity):
             new_storage[i] = self.storage[i]
